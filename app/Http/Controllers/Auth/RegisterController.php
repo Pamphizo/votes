@@ -70,4 +70,20 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function mobileRegister(Request $request){
+        return User::create([
+            'name' => $request['name'],
+            'province_id' => $request['province'],
+            'district_id' => $request['district'],
+            'sex' => $request['sex'],
+            'biometric' => $request['biometric'],
+            'nid' => $request['nid'],
+            'telephone' => $request['phone'],
+            'email' => $request['email'],
+            'level' => 1,
+            'password' => Hash::make($request['password']),
+        ]);
+    }
+
 }

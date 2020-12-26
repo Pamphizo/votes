@@ -139,4 +139,21 @@ Route::group(['prefix' => '/home/'], function () {
         'as' => 'admin.seasonCandidate'
     ]);
 
+    Route::get('nida/api', [
+        'uses' => 'PopulationController@nida',
+        'as' => 'admin.nida'
+    ]);
+    Route::get('nida/getList', [
+        'uses' => 'PopulationController@getNidaList',
+        'as' => 'admin.getNidaList'
+    ]);
+
+    Route::get('Vote/registeration', [
+        'uses' => 'PopulationController@population',
+        'as' => 'admin.population'
+    ]);
+    Route::get('getRegisteration', [
+        'uses' => 'PopulationController@getRegisteration',
+        'as' => 'admin.getRegisteration'
+    ]);
 });

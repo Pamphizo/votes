@@ -18,4 +18,5 @@ class District extends Model
     {
         return $this->belongsTo('App\Province');
     }
+
 }

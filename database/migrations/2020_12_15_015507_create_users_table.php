@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
+            $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
         });
     }
 

@@ -37,4 +37,30 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function mobileLogin(Request $request){
+        if(is_numeric($request->get('email'))){
+            $chekauth=Auth::attempt(['telephone' => $request->email, 'password' => $request->password]);
+            if($chekauth){
+
+                return response()->json(['login' => $chekauth,'user'=>Auth::user()], 200);
+
+            }else{
+                return response()->json(['login' => $chekauth,'user'=>$chekauth], 401);
+            }
+        }else{
+            $checkauth2=Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+            if($checkauth2){
+
+                return response()->json(['login' => $checkauth2,'user'=>Auth::user()], 200);
+
+
+            }else{
+                return response()->json(['login' => $checkauth2,'user'=>$checkauth2], 401);
+            }
+
+        }
+
+    }
+
 }

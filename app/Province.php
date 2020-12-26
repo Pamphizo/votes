@@ -14,4 +14,8 @@ class Province extends Model
     {
         return $this->hasMany('App\District','province_id');
     }
+    public function User()
+    {
+        return $this->hasMany('App\User','province_id');
+    }
 }

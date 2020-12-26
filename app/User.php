@@ -16,9 +16,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','nid','phone','biometric','province_id','district_id','level','status'
     ];
 
+    public function Province()
+    {
+        return $this->belongsTo('App\Province');
+    }
+    public function District()
+    {
+        return $this->belongsTo('App\District');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

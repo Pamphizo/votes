@@ -74,6 +74,18 @@
                         <span class="hide-menu">Seasons</span>
                     </a>
                 </li>
+{{--                <li class="sidebar-item">--}}
+{{--                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('admin.nida')}}" aria-expanded="false">--}}
+{{--                        <i class="fa fa-users"></i>--}}
+{{--                            <span class="hide-menu">NIDA Lists</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+                <li class="sidebar-item">
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('admin.population')}}" aria-expanded="false">
+                        <i class="fa fa-users"></i>
+                        <span class="hide-menu">Registeration</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark profile-dd" href="#" aria-expanded="false">
                         <i class="fa fa-users"></i>
