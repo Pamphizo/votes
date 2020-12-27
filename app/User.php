@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','nid','phone','biometric','province_id','district_id','level','status'
+        'name', 'email', 'password','nid','telephone','biometric','province_id','district_id','level','status'
     ];
 
     public function Province()

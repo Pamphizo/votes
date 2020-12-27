@@ -18,7 +18,8 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('district_id')->nullable();
             $table->unsignedBigInteger('province_id')->nullable();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
+            $table->string('nid')->unique()->nullable();
             $table->string('telephone')->unique()->nullable();
             $table->integer('level')->default(1);
             $table->timestamp('email_verified_at')->nullable();

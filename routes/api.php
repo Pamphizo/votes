@@ -17,7 +17,7 @@ Route::post('/population/login',
     'Auth\LoginController@mobileLogin')
     ->name('mobile.login');
 
-Route::post('/population/register',
+Route::post('population/register',
     'Auth\RegisterController@mobileRegister')
     ->name('mobile.register');
 
