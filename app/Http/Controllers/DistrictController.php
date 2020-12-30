@@ -54,4 +54,8 @@ class DistrictController extends Controller
             return response()->json(['district' => 'ok'], 200);
         }
     }
+    public function provinceDistrict($prov){
+        $dist=District::where('province_id','=',$prov)->get();
+        return response()->json(['district' => $dist], 200);
+    }
 }

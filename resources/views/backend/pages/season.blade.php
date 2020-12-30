@@ -19,6 +19,7 @@
             <div class="card material-card">
                 <h5 class="card-title text-uppercase p-3 bg-info text-white mb-0">
                     Season for Election
+
                     <button class="btn btn-success btn-flat btn-sm add_survey" style="float: right">
                         <i class="fa fa-plus"></i>Add Season</button>
                 </h5>
@@ -173,24 +174,43 @@
                     {data: 'reason'},
                     {data: 'status',
                     render:function (data,type,row) {
-                        if (row.status==true){
+                        var date1= new Date(row.start_date);
+                        var date2=new Date(row.end_date);
+                        var dateNow=new Date();
+                        if (row.status==true&&(dateNow.getTime() <= date2.getTime()&& dateNow.getTime() >= date1.getTime())){
                             return "<span class='btn btn-info'>Active Election</span>";
-                        }else {
-                            return "<span class='btn btn-warning'>may be Finished/upcoming</span>";
+                        }else  if (row.status==false&&(dateNow.getTime() <= date2.getTime()&& dateNow.getTime() >= date1.getTime())){
+                            return "<span class='btn btn-primary'>Election Postponed</span>";
+                        }
+                            else if(row.status==false&&dateNow.getTime() <= date1.getTime()) {
+
+
+                            return "<span class='btn btn-secondary'>Upcoming Election</span>";
+                        }else if(row.status==false && dateNow.getTime() >= date2.getTime()){
+                            return "<span class='btn btn-orange'>Election Closed/Finished</span>";
                         }
 
-                    }
+                            }
 
                     },
                     {
                         data: 'id',
                         render: function (data, type, row) {
-                            return"<button  data-url='/home/season/show/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
-                                "' > <i class='fa fa-edit'></i>Edit</button>" +
-                                "<button class='btn btn-danger btn-sm btn-flat js-delete ' data-id='" + data +
-                                "' data-url='/home/seasons/delete/" + row.id + "'> <i class='fa fa-trash'></i>Delete</button>";
+                            var date1 = new Date(row.start_date);
+                            var date2 = new Date(row.end_date);
+                            var dateNow = new Date();
+                            if (row.status == false && dateNow.getTime() <= date1.getTime()) {
 
+                                return "<button  data-url='/home/season/show/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
+                                    "' > <i class='fa fa-edit'></i>Edit</button>" +
+                                    "<button class='btn btn-danger btn-sm btn-flat js-delete ' data-id='" + data +
+                                    "' data-url='/home/seasons/delete/" + row.id + "'> <i class='fa fa-trash'></i>Delete</button>";
 
+                            } else {
+
+                                return "<button  data-url='/home/season/show/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
+                                    "' > <i class='fa fa-eye-dropper'></i>View</button>"
+                            }
                         }
                     }
                 ]

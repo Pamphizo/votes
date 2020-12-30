@@ -33,6 +33,11 @@ Route::post('province/district/{id}', [
     'uses' => 'MobileController@provinceDistrict',
     'as' => 'api.provinceDistrict'
 ]);
+Route::post('mobile/get/candidate', [
+    'uses' => 'MobileController@getCurrentElection',
+    'as' => 'api.getCurrentElection'
+]);
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

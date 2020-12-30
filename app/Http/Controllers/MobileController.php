@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Candidate;
 use App\District;
 use App\Province;
+use App\Season;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MobileController extends Controller
@@ -19,5 +22,18 @@ class MobileController extends Controller
     public function provinceDistrict($dist){
         $dist=District::where('province_id','=',$dist)->get();
         return response()->json(['district' => $dist], 200);
+    }
+    public function getCurrentElection(){
+        $season=Season::where('status','=',true)->orderBy('id', 'DESC')->first();
+        if ($season){
+            return response()->json(['message' => "ok",'season'=>$season], 200);
+        }else{
+            $dat=Carbon::now();
+            $season2=Season::where('status','=',false)->where('start_date','>',$dat)->orderBy('id', 'DESC')->first();
+            if ($season2){
+                $candidate=Candidate::with(['Province','District'])->where('season_id','=',$season2->id)->get();
+                return response()->json(['message' => "upcoming",'season'=>$season2,'candidates'=>$candidate], 200);
+            }
+        }
     }
 }

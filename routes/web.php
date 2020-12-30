@@ -133,10 +133,24 @@ Route::group(['prefix' => '/home/'], function () {
         'as' => 'admin.deleteSeason'
     ]);
 
+    Route::get('province/district/{prov}', [
+        'uses' => 'DistrictController@provinceDistrict',
+        'as' => 'admin.province.district'
+    ]);
+
 
     Route::get('season/candidates/{season}', [
-        'uses' => 'SeasonController@seasonCandidate',
+        'uses' => 'SeasonController@seasonCandidatePage',
         'as' => 'admin.seasonCandidate'
+    ]);
+    Route::get('season/getCandidates/{season}', [
+        'uses' => 'SeasonController@seasonGetCandidate',
+        'as' => 'admin.season.getCandidate'
+    ]);
+
+    Route::post('post/candidate', [
+        'uses' => 'CandidateController@saveCandidate',
+        'as' => 'admin.saveCandidate'
     ]);
 
     Route::get('nida/api', [

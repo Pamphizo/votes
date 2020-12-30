@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Candidate;
 use App\Province;
 use App\Season;
 use Illuminate\Http\Request;
@@ -59,9 +60,19 @@ class SeasonController extends Controller
             return response()->json(['season' => 'ok'], 200);
         }
     }
-    public function seasonCandidate($season){
+    public function seasonCandidatePage($season){
         if (Auth::check()){
-            return view('backend.pages.candidate');
+            $season=Season::find($season);
+            return view('backend.pages.candidate',['season'=>$season]);
+        }else{
+            return view('welcome');
+        }
+    }
+    public function seasonGetCandidate($season){
+        if (Auth::check()){
+            $candite=Candidate::with(['Province','District'])->where('season_id','=',$season)->get();
+            return response()->json(['candidates' => $candite], 200);
+
         }else{
             return view('welcome');
         }

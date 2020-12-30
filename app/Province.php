@@ -10,6 +10,10 @@ class Province extends Model
     protected $fillable = [
         'name'
     ];
+    public function Candidate()
+    {
+        return $this->hasMany('App\Candidate','province_id');
+    }
     public function District()
     {
         return $this->hasMany('App\District','province_id');
