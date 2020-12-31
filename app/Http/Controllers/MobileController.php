@@ -6,6 +6,7 @@ use App\Candidate;
 use App\District;
 use App\Province;
 use App\Season;
+use App\Vote;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,28 @@ class MobileController extends Controller
             if ($season2){
                 $candidate=Candidate::with(['Province','District'])->where('season_id','=',$season2->id)->get();
                 return response()->json(['message' => "upcoming",'season'=>$season2,'candidates'=>$candidate], 200);
+            }else{
+                $vote=Vote::with(['User','District',['Province']])->get();
+                return response()->json(['message' => "last",'season'=>$season2,'vote'=>$vote], 200);
+
             }
         }
+    }
+    public function Vote(Request $request){
+
+        $vote =new Vote();
+        $vote->candidate_id=$request['candidate'];
+        $vote->user_id=$request['user'];
+        $vote->province_id=$request['province'];
+        $vote->district_id=$request['district'];
+        $vote->season_id=$request['season'];
+        $vote->save();
+        return response()->json(['message' => "ok",'vote'=>$vote], 200);
+    }
+    public function loadVoting(Request $request){
+        $season=Season::where('status','=',true)->orderBy('id', 'DESC')->first();
+        $vote=Vote::with(['User','District',['Province']])->get();
+        return response()->json(['message' => "last",'vote'=>$vote], 200);
+
     }
 }

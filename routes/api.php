@@ -38,6 +38,15 @@ Route::post('mobile/get/candidate', [
     'as' => 'api.getCurrentElection'
 ]);
 
+Route::post('mobile/post/voting', [
+    'uses' => 'MobileController@Vote',
+    'as' => 'api.post.voting'
+]);
+Route::post('mobile/voting/result', [
+    'uses' => 'MobileController@loadVoting',
+    'as' => 'api.voting.result'
+]);
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
