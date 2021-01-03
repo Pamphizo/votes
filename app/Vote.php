@@ -14,4 +14,20 @@ class Vote extends Model
     {
         return $this->belongsTo('App\Season');
     }
+    public function User()
+    {
+        return $this->belongsTo('App\User');
+    }
+    public function Province()
+    {
+        return $this->belongsTo('App\Province');
+    }
+    public function District()
+    {
+        return $this->belongsTo('App\District');
+    }
+    public function Candidate()
+    {
+        return $this->belongsTo('App\Candidate');
+    }
 }

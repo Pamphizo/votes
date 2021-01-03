@@ -18,6 +18,10 @@ class Province extends Model
     {
         return $this->hasMany('App\District','province_id');
     }
+    public function Vote()
+    {
+        return $this->hasMany('App\Vote','province_id');
+    }
     public function User()
     {
         return $this->hasMany('App\User','province_id');

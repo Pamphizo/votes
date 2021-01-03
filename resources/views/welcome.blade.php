@@ -33,138 +33,312 @@
         </div>
 
     </section><!-- End About Section -->
-
-    <!-- ======= Team Section ======= -->
-    <section id="team" class="team section-bg" >
-        <div class="container" data-aos="fade-up">
-            <div class="section-header">
-                <?php
-                $squery=new \App\Http\Controllers\FrontController();
-                $season=$squery->activeSeason();
-                ?>
-                <h3>Candidate for 's Election</h3>
-                    @if($season)
-                <p>Know more about your Candidate</p>
-            </div>
-
-            <div class="row">
-
-                <div class="col-lg-4 col-md-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="member">
-                        <img src="assets/img/lady1.jpg" class="img-fluid" alt="">
-                        <div class="member-info">
-                            <div class="member-info-content">
-                                <h4>ABAYISENGA Nadine </h4>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="member">
-                        <img src="assets/img/men.jpg" class="img-fluid" alt="">
-                        <div class="member-info">
-                            <div class="member-info-content">
-                                <h4>HAKIZIMANA Jean Claude</h4>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="member">
-                        <img src="assets/img/lady2.jpg" class="img-fluid" alt="" style="height: 350px ;">
-                        <div class="member-info">
-                            <div class="member-info-content">
-                                <h4>NYIRANZABAMWITA Madeleine</h4>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @else
-                    <p style="color:darkorange;"><strong> No current Election Available</strong></p>
-                @endif
-
-
-            </div>
-
-        </div>
-    </section><!-- End Team Section -->
-
     <!-- ======= Services Section ======= -->
     <section id="services" class="bg-secondary services section-bg" >
         <div class="container" data-aos="fade-up">
+            <?php
+            $voting=new \App\Http\Controllers\VotingController();
+            $rs=$voting->getVoteStatus();
+            header('Content-Type: application/json');
+            $data=$rs->getOriginalContent();
+            $message=$data['message'];
+            $season=$data['season'];
+            $candidates=$data['candidates'];
+            ?>
 
-            <header class="section-header">
-                <h3>Election Statistics</h3>
-                @if(!$season)
-                    <p style="color:darkorange;"><strong> No current Election Available</strong></p>
+                @if($message=="upcoming")
+                    <header class="section-header">
+                    <h3 style="color: midnightblue">Upcoming Election</h3>
+                        <div class="col-md-6 offset-3">
+                            <div class="container" style="margin: 0 !important;padding: 0 !important;">
+                                <div class="jumbotron">
+                                    <h1 style="text-align: center !important;">{{$season->period}}</h1>
+                                    <p class="lead">
+                                        <span><strong> <b>Start Date :</b></strong>{{$season->start_date}}</span><br>
+                                        <span><strong><b>End Date : </b></strong>{{$season->end_date}}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h3>Candidate for 's Election</h3>
+                        <p>Know more about your Candidate</p>
+                        <div class="row">
+                            @foreach($candidates as $candidate)
+                                <div class="col-md-6 col-lg-6 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="box">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="candidates" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/candidates/'.$candidate->profile)}}" alt="" style="width: 80px;height: 80px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->name}}</a></h4>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="icon" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/logos/'.$candidate->logo)}}" alt="" style="width: 40px;height: 40px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->party}}</a></h4>
+                                            </div>
+                                        </div>
+
+
+                                        <h4 class="title"><a href="" style="color: darkblue">Candidate Detail</a></h4>
+                                        <p class="description">
+                                            <span><strong><b> Province:</b> </strong> {{$candidate->province->name}}</span><br>
+                                            <span><strong><b> District:</b> </strong>{{$candidate->district->name}}</span><br>
+                                            <span><strong><b> Date of Birth:</b> </strong> {{$candidate->dob}}</span><br>
+                                            <span><strong><b> Message :  </b> </strong>{{$candidate->strength}}</span><br>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                            @endforeach
+
+
+                        </div>
+                    </header>
+                @elseif($message=="previous")
+                    <header class="section-header">
+                        <h3 style="color: midnightblue">Previous Election </h3>
+                        <div class="col-md-6 offset-3">
+                            <div class="container" style="margin: 0 !important;padding: 0 !important;">
+                                <div class="jumbotron">
+                                    <h1 style="text-align: center !important;">{{$season->period}}</h1>
+                                    <p class="lead">
+                                        <span><strong> <b>Start Date :</b></strong>{{$season->start_date}}</span><br>
+                                        <span><strong><b>End Date : </b></strong>{{$season->end_date}}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h3>Candidate for 's Election</h3>
+                        <p>Know more about your Candidate</p>
+                        <div class="row">
+                            @foreach($candidates as $candidate)
+                                <div class="col-md-6 col-lg-6 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="box">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="candidates" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/candidates/'.$candidate->profile)}}" alt="" style="width: 80px;height: 80px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->name}}</a></h4>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="icon" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/logos/'.$candidate->logo)}}" alt="" style="width: 40px;height: 40px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->party}}</a></h4>
+                                            </div>
+                                        </div>
+
+
+                                        <h4 class="title"><a href="" style="color: darkblue">Candidate Detail</a></h4>
+                                        <p class="description">
+                                            <span><strong><b> Province:</b> </strong> {{$candidate->province->name}}</span><br>
+                                            <span><strong><b> District:</b> </strong>{{$candidate->district->name}}</span><br>
+                                            <span><strong><b> Date of Birth:</b> </strong> {{$candidate->dob}}</span><br>
+                                            <span><strong><b> Message :  </b> </strong>{{$candidate->strength}}</span><br>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                            @endforeach
+
+
+                        </div>
+                    </header>
+                @elseif($message=="active")
+                    <header class="section-header">
+                        <h3 style="color: midnightblue">Current Election</h3>
+                        <div class="col-md-6 offset-3">
+                            <div class="container" style="margin: 0 !important;padding: 0 !important;">
+                                <div class="jumbotron">
+                                    <h1 style="text-align: center !important;">{{$season->period}}</h1>
+                                    <p class="lead">
+                                        <span><strong> <b>Start Date :</b></strong>{{$season->start_date}}</span><br>
+                                        <span><strong><b>End Date : </b></strong>{{$season->end_date}}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h3>Candidate for 's Election</h3>
+                        <p>Know more about your Candidate</p>
+                        <div class="row">
+                            @foreach($candidates as $candidate)
+                                <div class="col-md-6 col-lg-6 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="box">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="candidates" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/candidates/'.$candidate->profile)}}" alt="" style="width: 80px;height: 80px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->name}}</a></h4>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="icon" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/logos/'.$candidate->logo)}}" alt="" style="width: 40px;height: 40px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->party}}</a></h4>
+                                            </div>
+                                        </div>
+
+
+                                        <h4 class="title"><a href="" style="color: darkblue">Candidate Detail</a></h4>
+                                        <p class="description">
+                                            <span><strong><b> Province:</b> </strong> {{$candidate->province->name}}</span><br>
+                                            <span><strong><b> District:</b> </strong>{{$candidate->district->name}}</span><br>
+                                            <span><strong><b> Date of Birth:</b> </strong> {{$candidate->dob}}</span><br>
+                                            <span><strong><b> Message :  </b> </strong>{{$candidate->strength}}</span><br>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                            @endforeach
+
+
+                        </div>
+                    </header>
+
+                @elseif($message=="suspend")
+
+                    <header class="section-header">
+                        <h3 style="color: midnightblue"> Election Suspended waiting</h3>
+                        <div class="col-md-6 offset-3">
+                            <div class="container" style="margin: 0 !important;padding: 0 !important;">
+                                <div class="jumbotron">
+                                    <h1 style="text-align: center !important;">{{$season->period}}</h1>
+                                    <p class="lead">
+                                        <span><strong> <b>Start Date :</b></strong>{{$season->start_date}}</span><br>
+                                        <span><strong><b>End Date : </b></strong>{{$season->end_date}}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h3>Candidate for 's Election</h3>
+                        <p>Know more about your Candidate</p>
+                        <div class="row">
+                            @foreach($candidates as $candidate)
+                                <div class="col-md-6 col-lg-6 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="box">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="candidates" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/candidates/'.$candidate->profile)}}" alt="" style="width: 80px;height: 80px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->name}}</a></h4>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="icon" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/logos/'.$candidate->logo)}}" alt="" style="width: 40px;height: 40px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$candidate->party}}</a></h4>
+                                            </div>
+                                        </div>
+
+
+                                        <h4 class="title"><a href="" style="color: darkblue">Candidate Detail</a></h4>
+                                        <p class="description">
+                                            <span><strong><b> Province:</b> </strong> {{$candidate->province->name}}</span><br>
+                                            <span><strong><b> District:</b> </strong>{{$candidate->district->name}}</span><br>
+                                            <span><strong><b> Date of Birth:</b> </strong> {{$candidate->dob}}</span><br>
+                                            <span><strong><b> Message :  </b> </strong>{{$candidate->strength}}</span><br>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                            @endforeach
+
+
+                        </div>
+                    </header>
                 @else
-                <p>Smart Election support the population to get the information for election at real time</p>
+                    <header class="section-header">
+                        <p style="color:darkorange;"><strong> No current Candidate Available</strong></p>
+                    </header>
+
+                @endif
+
+        </div>
+    </section>
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="bg-secondary services section-bg" >
+        <div class="container" data-aos="fade-up">
+            <?php
+            $pp=new \App\Http\Controllers\VotingController();
+            $loaded=$pp->voteStatistic();
+            header('Content-Type: application/json');
+            $contents=$loaded->getOriginalContent();
+            $state=$contents['state'];
+            $mess=$contents['message'];
+            $votes=$contents['votes'];
+//            $provinces=$contents['province'];
+
+            ?>
+            <header class="section-header">
+                @if($state=="ok")
+                    @if($mess=="active")
+                        <h3>Current Voting Statistics</h3>
+                    @else
+                        <h3>Previous Election Statistics</h3>
+                    @endif
+                        <div class="row">
+                            <div class="col-md-10 offset-1">
+                                <div id="container" style="border: 1px solid #ccc;height: 60vh;width: auto"></div>
+                            </div>
+                        </div>
+
+
+                @else
+                <h3> Neither current nor previous Election Statistic Available </h3>
+                @endif
+
             </header>
 
-            <div class="row">
-
-                <div class="col-md-6 col-lg-4 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="box">
-                        <div class="icon" style="background: #fceef3;"><i class="fa fa-id-card" style="color: #ff689b;"></i></div>
-                        <h4 class="title"><a href=""> Lost &fount Identity</a></h4>
-                        <p class="description">
-                            Now you can publish your identity documents missed also you can notify the identity
-                            you found in your way</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="box">
-                        <div class="icon" style="background: #fff0da;"><i class="fa fa-drivers-license-o" style="color: #e98e06;"></i></div>
-                        <h4 class="title"><a href="">Lost & Found Driver Lisence</a></h4>
-                        <p class="description">Now you can publish your Driver Lisence documents missed also you can notify the Driver Lisence
-                            you found in your way</p>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="box">
-                        <div class="icon" style="background: #e6fdfc;"><i class="ion-ios-paper-outline" style="color: #3fcdc7;"></i></div>
-                        <h4 class="title"><a href="">Lost & Found Land's Documents</a></h4>
-                        <p class="description">Now you can publish your Land's  documents missed also you can notify the Land's
-                            you found in your way</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 wow" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="box">
-                        <div class="icon" style="background: #eafde7;"><i class="fa fa-hospital-o" style="color:#41cf2e;"></i></div>
-                        <h4 class="title"><a href="">Lost & Found Insurance Card</a></h4>
-                        <p class="description">Now you can publish your Insurance Card documents missed also you can notify the Insurance Card
-                            you found in your way</p>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-                    <div class=" box">
-                        <div class="icon" style="background: #e1eeff;"><i class="fa fa-graduation-cap" style="color: #2282ff;"></i></div>
-                        <h4 class="title"><a href="">Lost & Found School Documents</a></h4>
-                        <p class="description">Now you can publish your School documents missed also you can notify the School
-                            you found in your way</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="box">
-                        <div class="icon" style="background: #ecebff;"><i class="fa fa-certificate" style="color: #8660fe;"></i></div>
-                        <h4 class="title"><a href="">Lost & Found Certificate</a></h4>
-                        <p class="description">Now you can publish your Certificate documents missed also you can notify the Certificate
-                            you found in your way</p>
-                    </div>
-                </div>
-
-            </div>
-
-
-            @endif
         </div>
-    </section><!-- End Services Section -->
+    </section>
+
+@endsection
+@section('js')
+
+    <script>
+        anychart.onDocumentReady(function() {
+
+            // set the data
+            var data = {
+                header: ["Candidate", "Points"],
+                rows: [
+                    <?php
+                    foreach ($votes as $det_key => $vote)
+                        echo "['".$vote['candidate_id']."', ".$vote['points']."],"
+
+                    //                        }
+                    ?>
+
+                ]};
+
+            // create the chart
+            var chart = anychart.column();
+
+            // add data
+            chart.data(data);
+
+            // set the chart title
+            chart.title("Voting Result");
+            chart.pointWidth(20);
+
+            // draw
+            chart.container("container");
+            chart.draw();
+        });
+    </script>
 
 @endsection

@@ -27,12 +27,7 @@
     <!-- Template Main CSS File -->
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
 
-    <!-- =======================================================
-    * Template Name: Rapid - v2.2.0
-    * Template URL: https://bootstrapmade.com/rapid-multipurpose-bootstrap-business-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+    <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
 </head>
 
 <body>
@@ -73,7 +68,7 @@
 <script src="{{asset('assets/vendor/owl.carousel/owl.carousel.min.js')}}"></script>
 <script src="{{asset('assets/vendor/waypoints/jquery.waypoints.min.js')}}"></script>
 <script src="{{asset('assets/vendor/aos/aos.js')}}"></script>
-
+@yield('js')
 <!-- Template Main JS File -->
 <script src="{{asset('assets/js/main.js')}}"></script>
 

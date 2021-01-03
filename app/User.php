@@ -27,6 +27,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\District');
     }
+    public function Vote()
+    {
+        return $this->hasMany('App\Vote','user_id');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

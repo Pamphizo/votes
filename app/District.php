@@ -18,6 +18,10 @@ class District extends Model
     {
         return $this->hasMany('App\Candidate','district_id');
     }
+    public function Vote()
+    {
+        return $this->hasMany('App\Vote','district_id');
+    }
     public function Province()
     {
         return $this->belongsTo('App\Province');

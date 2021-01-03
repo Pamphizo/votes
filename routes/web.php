@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('vote/Result', [
+    'uses' => 'MobileController@getVoteStatus',
+    'as' => 'home.vote.status'
+]);
+Route::get('vote/status', [
+    'uses' => 'VotingController@voteResultPage',
+    'as' => 'home.vote.result'
+]);
 Route::get('/user/admin/register','AdminController@getRegister')->name('admin.register');
 Auth::routes();
 
