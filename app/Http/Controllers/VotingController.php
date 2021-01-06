@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class VotingController extends Controller
 {
+    public  $pp;
     public function getVoteStatus(){
 
         $dat=Carbon::now();
@@ -43,7 +44,9 @@ class VotingController extends Controller
 
                 }
                 }
-                return response()->json(['message' => "found"], 200);
+                $sea=new Season();
+                $can=new Candidate();
+                return response()->json(['message' => "found",'season'=>$sea,'candidates'=>$can], 200);
 
             }
         }
@@ -132,6 +135,29 @@ class VotingController extends Controller
         }else{
             $season2=Season::where('status','=',false)->where('end_date','>',$dat)->orderBy('id', 'DESC')->first();
 
+        }
+    }
+    public function getWinner(){
+        $dat=Carbon::now();
+        $season2=Season::where('status','=',false)->where('end_date','<',$dat)->orderBy('id', 'DESC')->first();
+        if ($season2){
+            $votes=Vote::with(['Candidate'])
+                ->selectRaw('count(user_id) as points,candidate_id')
+                ->groupBy('candidate_id')
+                ->where('season_id','=',$season2->id)
+                ->get();
+            $dd=$votes->max('points');
+
+            $this->pp=$dd;
+            $filter = $votes->filter(function($value, $key) {
+
+                if ($value['points'] == $this->pp) {
+                    return true;
+                }
+            });
+
+            $filter->all();
+            return $filter;
         }
     }
 }

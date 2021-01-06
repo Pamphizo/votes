@@ -60,6 +60,22 @@ class SeasonController extends Controller
             return response()->json(['season' => 'ok'], 200);
         }
     }
+    public function activate($id){
+        $seas=Season::find($id);
+        if ($seas){
+            $seas->status=1;
+            $seas->save();
+            return response()->json(['season' => 'ok'], 200);
+        }
+    }
+    public function desactivate($id){
+        $seas=Season::find($id);
+        if ($seas){
+            $seas->status=0;
+            $seas->save();
+            return response()->json(['season' => 'ok'], 200);
+        }
+    }
     public function seasonCandidatePage($season){
         if (Auth::check()){
             $season=Season::find($season);
@@ -70,7 +86,9 @@ class SeasonController extends Controller
     }
     public function seasonGetCandidate($season){
         if (Auth::check()){
-            $candite=Candidate::with(['Province','District'])->where('season_id','=',$season)->get();
+            $candite=Candidate::with(['Province','District'])->where('season_id','=',$season)
+                ->orderBy('id','DESC')
+                ->get();
             return response()->json(['candidates' => $candite], 200);
 
         }else{

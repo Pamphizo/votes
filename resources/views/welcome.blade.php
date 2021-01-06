@@ -41,10 +41,13 @@
             $rs=$voting->getVoteStatus();
             header('Content-Type: application/json');
             $data=$rs->getOriginalContent();
+            if(!is_null($data)){
             $message=$data['message'];
             $season=$data['season'];
             $candidates=$data['candidates'];
+            }
             ?>
+
 
                 @if($message=="upcoming")
                     <header class="section-header">
@@ -281,12 +284,13 @@
             $mess=$contents['message'];
             $votes=$contents['votes'];
 //            $provinces=$contents['province'];
+            $win=$pp->getWinner();
 
             ?>
             <header class="section-header">
                 @if($state=="ok")
                     @if($mess=="active")
-                        <h3>Current Voting Statistics</h3>
+                        <h3>Current Voting Statistics </h3>
                     @else
                         <h3>Previous Election Statistics</h3>
                     @endif
@@ -295,9 +299,44 @@
                                 <div id="container" style="border: 1px solid #ccc;height: 60vh;width: auto"></div>
                             </div>
                         </div>
+                        @if($mess!="active")
+                            <div class="row">
+                            <h3>The Winner of Previous Election is <strong><b> {{$win[0]->candidate->name}}</b></strong> with {{$win[0]->points}} Points </h3>
+                            </div>
+                                                            <div class="row">
+                                <div class="col-md-6 col-lg-6 wow bounceInUp" data-aos="zoom-in" data-aos-delay="100">
+                                    <div class="box">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="candidates" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/candidates/'.$win[0]->candidate->profile)}}" alt="" style="width: 80px;height: 80px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$win[0]->candidate->name}}</a></h4>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="icon" style="background: #fceef3;">
+                                                    <img src="{{asset('backend/logos/'.$win[0]->candidate->logo)}}" alt="" style="width: 40px;height: 40px">
+                                                </div>
+                                                <h4 class="title"><a href=""> {{$win[0]->candidate->party}}</a></h4>
+                                            </div>
+                                        </div>
 
 
+                                        <h4 class="title"><a href="" style="color: darkblue">Candidate Detail</a></h4>
+                                        <p class="description">
+                                            <span><strong><b> Message :  </b> </strong>{{$win[0]->candidate->strength}}</span><br>
+                                            <span><strong><b> Points :  </b> </strong>{{$win[0]->points}} points</span><br>
+
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+{{--                            <p>{{$win}}</p>--}}
+
+                        @endif
                 @else
+
                 <h3> Neither current nor previous Election Statistic Available </h3>
                 @endif
 

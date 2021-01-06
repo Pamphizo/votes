@@ -3,7 +3,7 @@
 @section('title','Season')
 @section('css')
     <link href="{{asset('/backend/dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
-    <link href="{{asset('/backend/dashboard/css/dataTables.checkboxes.css')}}" rel="stylesheet">
+{{--    <link href="{{asset('/backend/dashboard/css/dataTables.checkboxes.css')}}" rel="stylesheet">--}}
     <link href="{{asset('/backend/dashboard/css/datatables.min.css')}}" rel="stylesheet">
     <link href="{{asset('/css/buttons.dataTables.min.css')}}" rel="stylesheet">
     {{--    <link href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css" rel="stylesheet">--}}
@@ -111,10 +111,10 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
-                    <h4 class="modal-title" id="exampleModalLabel1">Edit Province</h4>
+                    <h4 class="modal-title" id="exampleModalLabel1">Edit Season</h4>
                     <button type="button" class="close ml-auto" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <form  class="form-horizontal"  action="{{route('admin.updateProvince')}}" id="editForm">
+                <form  class="form-horizontal"  action="{{route('admin.updateSeason')}}" id="editForm">
                     {{ csrf_field() }}
                     <div class="modal-body">
 
@@ -130,13 +130,39 @@
                         <div class="edit-result">
 
                             <div class="form-group row">
-                                <label for="edit-name" class="control-label col-sm-3">Name</label>
+                                <label for="edit-name" class="control-label col-sm-3">Name/Period</label>
                                 <label class="col-sm-1 control-label">:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="edit-name" name="name" required autofocus>
-                                    <span class="text-danger" id="ename" style="color: red"></span>
+                                    <input type="text" class="form-control" id="edit-period" name="period" required autofocus>
+                                    <span class="text-danger" id="eperiod" style="color: red"></span>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label for="edit-date1" class="control-label col-sm-3">Start Date</label>
+                                <label class="col-sm-1 control-label">:</label>
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" id="edit-date1" name="date1" required >
+                                    <span class="text-danger" id="edate1" style="color: red"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="edit-date2" class="control-label col-sm-3">End Date</label>
+                                <label class="col-sm-1 control-label">:</label>
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" id="edit-date2" name="date2" required >
+                                    <span class="text-danger" id="edate2" style="color: red"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="edit-reason" class="control-label col-sm-3">Reason/Mission</label>
+                                <label class="col-sm-1 control-label">:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="edit-reason" name="reason"  autofocus>
+                                    <span class="text-danger" id="ereason" style="color: red"></span>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="modal-footer editFooter">
 
@@ -206,9 +232,24 @@
                                     "<button class='btn btn-danger btn-sm btn-flat js-delete ' data-id='" + data +
                                     "' data-url='/home/seasons/delete/" + row.id + "'> <i class='fa fa-trash'></i>Delete</button>";
 
-                            } else {
+                            }else if(dateNow.getTime() >= date1.getTime()&&dateNow.getTime() <= date2.getTime()){
+                                if (row.status == false){
+                                    return "<button  data-url='/home/season/show/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
+                                        "' > <i class='fa fa-edit'></i>Edit</button>" +
+                                        "<button class='btn btn-success btn-sm btn-flat js-activate ' data-id='" + data +
+                                        "' data-url='/home/seasons/activate/" + row.id + "'> <i class='fa fa-check-square'></i>Activate</button>";
 
-                                return "<button  data-url='/home/season/show/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
+                                }else{
+                                    return "<button  data-url='/home/season/show/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
+                                        "' > <i class='fa fa-edit'></i>Edit</button>" +
+                                        "<button class='btn btn-warning btn-sm btn-flat js-desactivate ' data-id='" + data +
+                                        "' data-url='/home/seasons/desactivate/" + row.id + "'> <i class='fa fa-eye-slash'></i>Desactivate</button>";
+
+                                }
+                            }
+                            else {
+
+                                return "<button  data-url='/home/season/detail/" + row.id + "' class='btn btn-info btn-sm btn-flat js-edit' data-id='" + data +
                                     "' > <i class='fa fa-eye-dropper'></i>View</button>"
                             }
                         }
@@ -290,6 +331,108 @@
 
 
 
+            //Edit and update
+            manageTable.on('click', '.js-edit', function () {
+                $('#editModal').modal('show');
+                var footer = $('.editFooter');
+                $('.modal-loading').show();
+                $('.edit-result').hide();
+                footer.hide();
+                var url = $(this).attr('data-url');
+                var id = $(this).attr('data-id');
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {id: id},
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        // modal loading
+                        $('.modal-loading').hide();
+                        // modal result
+                        $('.edit-result').show();
+                        // modal footer
+                        footer.show();
+                        // setting values returned
+                        $("#edit-period").val(response.season.period);
+                        $("#edit-date1").val(response.season.start_date);
+                        $("#edit-date2").val(response.season.end_date);
+                        $("#edit-reason").val(response.season.reason);
+
+                        // add hidden id
+                        $('#id').val(response.season.id);
+                        // update - form
+                        $('#editForm').unbind('submit').bind('submit', function (e) {
+                            e.preventDefault();
+                            var form = $(this);
+                            form.parsley().validate();
+                            if (!form.parsley().isValid()) {
+                                return false;
+                            }
+                            // edit btn
+                            $('#editBtn').button('loading');
+
+                            $.ajax({
+                                url: form.attr('action'),
+                                type: 'PUT',
+                                data: form.serialize()
+                            }).done(function (response) {
+                                // submit btn
+                                $('#editBtn').button('reset');
+//                                form[0].reset();
+                                // reload the table
+                                table.destroy();
+                                myFunc();
+                                // remove the error text
+                                $(".text-danger").remove();
+                                // remove the form error
+                                $('#edit-messages').html('<div class="alert alert-success">' +
+                                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                                    '<strong><i class="glyphicon glyphicon-ok-sign"></i></strong> Season  successfully updated. </div>');
+
+                                $(".alert-success").delay(500).show(10, function () {
+                                    $(this).delay(3000).hide(10, function () {
+                                        $(this).remove();
+                                    });
+                                }); // /.alert
+                            }).fail(function (response) {
+                                console.log(response);
+                                $('#editBtn').button('reset');
+                                var errors = "";
+                                errors+="<b>"+response.responseJSON.message+"</b>";
+                                var data=response.responseJSON.errors;
+
+                                $.each(data,function (i, value) {
+                                    console.log(value);
+                                    if (i=='name'){
+                                        $('#ename').html(value[0])
+                                    }
+                                    $.each(value,function (j, values) {
+                                        errors += '<p>' + values + '</p>';
+                                    });
+                                });
+                                $('#edit-messages').html('<div class="alert alert-danger flat">' +
+                                    '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                                    '<strong><i class="glyphicon glyphicon-glyphicon-remove"></i></strong><b>oops:</b>'+errors+'</div>');
+
+                                $(".alert-success").delay(500).show(10, function () {
+                                    $(this).delay(3000).hide(10, function () {
+                                        $(this).remove();
+                                    });
+                                });
+                            });	 // /ajax
+
+                            return false;
+                        }); // /update - form
+
+                    } // /success
+                }); // ajax function
+            });
+
+
+
+
             manageTable.on('click', '.js-delete', function () {
                 var button = $(this);
                 bootbox.confirm("Are you sure you want to Delete this Election Season May delete also Candidate?", function (result) {
@@ -321,6 +464,71 @@
                     }
                 })
             });
+            manageTable.on('click', '.js-activate', function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to Activate  this Election Season ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: button.attr('data-url'),
+                            method: 'put',
+                            data: {_token: $('#token').val()},
+                            success: function (data) {
+                                console.log(data);
+                                var tr = button.parents("tr");
+                                bootbox.alert({
+                                    title: "success",
+                                    message: "<i class='fa fa-check'></i>" +
+                                        " Season Activated successful"
+                                });
+                                table.rows(tr).remove().draw(false);
+                                table.destroy();
+                                myFunc();
+                            }, error: function () {
+                                bootbox.alert({
+                                    title: "Error",
+                                    message: "<i class='fa fa-warning'></i>" +
+                                        " Season not Activated please try again"
+                                });
+                            }
+                        });
+
+                    }
+                })
+            });
+
+            manageTable.on('click', '.js-desactivate', function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to Desactivate this Election Season ?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: button.attr('data-url'),
+                            method: 'put',
+                            data: {_token: $('#token').val()},
+                            success: function (data) {
+                                console.log(data);
+                                var tr = button.parents("tr");
+                                bootbox.alert({
+                                    title: "success",
+                                    message: "<i class='fa fa-warning'></i>" +
+                                        " Season Desactivated successful"
+                                });
+                                table.rows(tr).remove().draw(false);
+                                table.destroy();
+                                myFunc();
+                            }, error: function () {
+                                bootbox.alert({
+                                    title: "Error",
+                                    message: "<i class='fa fa-warning'></i>" +
+                                        " Season not Desactivated please try again"
+                                });
+                            }
+                        });
+
+                    }
+                })
+            });
+
+
         });
     </script>
 
@@ -332,7 +540,4 @@
     <script src="{{asset('/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{asset('/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('/backend/dashboard/js/dataTables.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js"></script>
 @endsection

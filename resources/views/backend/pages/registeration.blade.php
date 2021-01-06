@@ -34,9 +34,7 @@
                                 <th>District Name</th>
                                 <th> Name</th>
                                 <th>National Id</th>
-                                <th>Sex</th>
                                 <th>Telephone</th>
-                                <th>DoB</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,9 +69,7 @@
                     {data: 'district.name'},
                     {data: 'name'},
                     {data: 'nid'},
-                    {data: 'sex'},
-                    {data: 'telephone'},
-                    {data: 'dob'}
+                    {data: 'telephone'}
                 ]
             });
         }

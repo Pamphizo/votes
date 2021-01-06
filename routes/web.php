@@ -132,7 +132,7 @@ Route::group(['prefix' => '/home/'], function () {
         'uses' => 'SeasonController@updateSeason',
         'as' => 'admin.updateSeason'
     ]);
-    Route::get('seasons/show/{id}', [
+    Route::get('season/show/{id}', [
         'uses' => 'SeasonController@show',
         'as' => 'admin.showSeason'
     ]);
@@ -140,6 +140,15 @@ Route::group(['prefix' => '/home/'], function () {
         'uses' => 'SeasonController@delete',
         'as' => 'admin.deleteSeason'
     ]);
+    Route::put('seasons/activate/{id}', [
+        'uses' => 'SeasonController@activate',
+        'as' => 'admin.showActivate'
+    ]);
+    Route::put('seasons/desactivate/{id}', [
+        'uses' => 'SeasonController@desactivate',
+        'as' => 'admin.showDesactivate'
+    ]);
+
 
     Route::get('province/district/{prov}', [
         'uses' => 'DistrictController@provinceDistrict',
@@ -159,6 +168,18 @@ Route::group(['prefix' => '/home/'], function () {
     Route::post('post/candidate', [
         'uses' => 'CandidateController@saveCandidate',
         'as' => 'admin.saveCandidate'
+    ]);
+    Route::post('update/candidate', [
+        'uses' => 'CandidateController@updateCandidate',
+        'as' => 'admin.updateCandidate'
+    ]);
+    Route::delete('/candidate/delete/{id}', [
+        'uses' => 'CandidateController@delete',
+        'as' => 'admin.deleteCandidate'
+    ]);
+    Route::get('/candidate/show/{id}', [
+        'uses' => 'CandidateController@show',
+        'as' => 'admin.showCandidate'
     ]);
 
     Route::get('nida/api', [

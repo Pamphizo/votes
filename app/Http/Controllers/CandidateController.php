@@ -31,4 +31,33 @@ class CandidateController extends Controller
 
         return response()->json(['candidate' => "ok"], 200);
     }
+    public function delete($id){
+        $pop=Candidate::find($id);
+        if ($pop){
+            $pop->delete();
+            return response()->json(['candidate' => 'ok'], 200);
+        }
+    }
+    public function show($id){
+        $pop=Candidate::find($id);
+        if ($pop){
+            return response()->json(['candidate' => $pop], 200);
+        }
+    }
+    public function updateCandidate(Request $request){
+        $cand=Candidate::find($request['id']);
+        if ($cand){
+            $cand->name=$request['name'];
+            $cand->identity=$request['identity'];
+            $cand->dob=$request['dob'];
+            $cand->party=$request['party'];
+            $cand->strength=$request['strength'];
+            $cand->save();
+            return response()->json(['candidate' => 'ok'], 200);
+        }
+        return response()->json(['candidate' => 'found'], 404);
+    }
+    public function candidateDetail($id){
+
+    }
 }
